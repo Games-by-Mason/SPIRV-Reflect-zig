@@ -21,7 +21,7 @@ defer module.deinit();
 
 `ShaderModule` contains the reflection data.
 
-The static library is also exported if you prefer want access to the C API.
+The static library is also exported if you want access to the C API.
 
 ## SPIRV-Reflect version & upgrade process
 
