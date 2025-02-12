@@ -87,10 +87,10 @@ pub const ShaderModule = extern struct {
     spec_constants: ?[*]SpecializationConstant,
     _internal: ?*anyopaque,
 
-    pub fn init(spv: []const u32) Error!@This() {
+    pub fn init(spv: []const u8) Error!@This() {
         var result: @This() = undefined;
         try spvrErr(spvReflectGetShaderModule(
-            spv.len * @sizeOf(u32),
+            spv.len * @sizeOf(u8),
             spv.ptr,
             @ptrCast(&result),
         ));
