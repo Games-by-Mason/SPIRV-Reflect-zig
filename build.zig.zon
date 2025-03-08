@@ -1,6 +1,8 @@
 .{
-    .name = "SPIRV-Reflect-zig",
+    .name = .spirv_reflect,
+    .fingerprint = 0xe9726026b092c163,
     .version = "0.0.0",
+    .minimum_zig_version = "0.14.0",
     .dependencies = .{
         // Mirror available: https://github.com/Games-by-Mason/SPIRV-Reflect
         .@"SPIRV-Reflect" = .{
