@@ -9,8 +9,12 @@ pub fn build(b: *std.Build) void {
     // Build options
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    const optimize_external = switch (optimize) {
-        .Debug => .ReleaseSafe,
+    const safety = switch (optimize) {
+        .Debug, .ReleaseSafe => true,
+        .ReleaseFast, .ReleaseSmall => false,
+    };
+    const optimize_external: std.builtin.OptimizeMode = switch (optimize) {
+        .Debug => if (target.result.os.tag == .windows) .Debug else .ReleaseSafe,
         else => optimize,
     };
 
@@ -21,7 +25,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize_external,
     });
-    if (optimize == .ReleaseSafe or optimize == .ReleaseFast) {
+    if (safety) {
         lib.root_module.addCMacro("SPIRV_REFLECT_ENABLE_ASSERTS", "1");
     }
     lib.addCSourceFile(.{
