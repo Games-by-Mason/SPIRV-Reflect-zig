@@ -14,6 +14,10 @@ pub fn build(b: *std.Build) void {
         .ReleaseFast, .ReleaseSmall => false,
     };
     const optimize_external: std.builtin.OptimizeMode = switch (optimize) {
+        // Can remove this conditional once this makes it into a Zig release, or by tagging a
+        // version of this library for Zig 0.14.0 and then removing the conditional in a later
+        // commit:
+        // https://github.com/ziglang/zig/pull/23140
         .Debug => if (target.result.os.tag == .windows) .Debug else .ReleaseSafe,
         else => optimize,
     };
@@ -32,7 +36,7 @@ pub fn build(b: *std.Build) void {
         .file = upstream.path("spirv_reflect.c"),
         .flags = &flags,
     });
-    lib.installHeadersDirectory(upstream.path(""), "spirv_reflect", .{});
+    lib.installHeadersDirectory(upstream.path("."), "spirv_reflect", .{});
     lib.linkLibC();
 
     // Build the Zig API
