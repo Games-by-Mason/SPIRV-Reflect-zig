@@ -18,7 +18,7 @@ pub fn build(b: *std.Build) void {
         // version of this library for Zig 0.14.0 and then removing the conditional in a later
         // commit:
         // https://github.com/ziglang/zig/pull/23140
-        .Debug => if (target.result.os.tag == .windows) .Debug else .ReleaseSafe,
+        .Debug => if (target.result.os.tag == .windows) .ReleaseFast else .ReleaseSafe,
         else => optimize,
     };
 
