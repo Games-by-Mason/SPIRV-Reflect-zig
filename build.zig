@@ -21,10 +21,13 @@ pub fn build(b: *std.Build) void {
 
     // Build the upstream library
     const upstream = b.dependency("SPIRV-Reflect", .{});
-    const lib = b.addStaticLibrary(.{
+    const lib = b.addLibrary(.{
+        .linkage = .static,
         .name = "SPIRV-Reflect",
-        .target = target,
-        .optimize = optimize_external,
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize_external,
+        }),
     });
     if (safety) {
         lib.root_module.addCMacro("SPIRV_REFLECT_ENABLE_ASSERTS", "1");
@@ -47,9 +50,11 @@ pub fn build(b: *std.Build) void {
 
     // Test the Zig API
     const tests = b.addTest(.{
-        .root_source_file = b.path("src/tests.zig"),
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/tests.zig"),
+            .target = target,
+            .optimize = optimize,
+        }),
     });
     tests.linkLibrary(lib);
     tests.root_module.addImport("spirv_reflect", mod);
